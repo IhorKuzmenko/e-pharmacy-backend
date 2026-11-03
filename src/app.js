@@ -4,6 +4,7 @@ import cors from 'cors';
 import productsRouter from './routes/productsRouter.js';
 import storesRouter from './routes/storesRouter.js';
 import reviewsRouter from './routes/reviewsRouter.js';
+import userRouter from './routes/userRouter.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/products', productsRouter);
 app.use('/api/stores', storesRouter);
 app.use('/api/customer-reviews', reviewsRouter);
+app.use('/api/user', userRouter);
 
 app.use((req, res) => {
   res.status(404).json({
@@ -30,8 +32,10 @@ app.use((req, res) => {
 app.use((error, req, res, next) => {
   console.error(error);
 
-  res.status(500).json({
-    message: 'Internal Server Error',
+  const status = error.status || 500;
+
+  res.status(status).json({
+    message: status === 500 ? 'Internal Server Error' : error.message,
   });
 });
 
