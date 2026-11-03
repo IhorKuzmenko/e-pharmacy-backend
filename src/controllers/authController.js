@@ -4,6 +4,7 @@ import {
   registerUser,
   loginUser,
   getUserInfo,
+  logoutUser,
 } from '../services/authService.js';
 
 export const registerController = async (req, res, next) => {
@@ -58,4 +59,16 @@ export const getUserInfoController = (req, res) => {
   const user = getUserInfo(req.user);
 
   res.status(200).json(user);
+};
+
+export const logoutController = async (req, res, next) => {
+  try {
+    await logoutUser(req.token, req.tokenPayload);
+
+    res.status(200).json({
+      message: 'Logout successful',
+    });
+  } catch (error) {
+    next(error);
+  }
 };

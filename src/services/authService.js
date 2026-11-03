@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import User from '../models/User.js';
+import { revokeToken } from './tokenService.js';
 
 export const registerUser = async ({ name, email, phone, password }) => {
   const normalizedEmail = email.trim().toLowerCase();
@@ -90,3 +91,13 @@ export const getUserInfo = (user) => ({
   email: user.email,
   phone: user.phone,
 });
+
+export const logoutUser = async (token, tokenPayload) => {
+  if (!Number.isInteger(tokenPayload.exp)) {
+    throw new Error('Token expiration is missing');
+  }
+
+  const expiresAt = new Date(tokenPayload.exp * 1000);
+
+  await revokeToken(token, expiresAt);
+};

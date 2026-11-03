@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import User from '../models/User.js';
+import { isTokenRevoked } from '../services/tokenService.js';
 
 export const authenticate = async (req, res, next) => {
   try {
@@ -30,6 +31,14 @@ export const authenticate = async (req, res, next) => {
       });
     }
 
+    const revoked = await isTokenRevoked(token);
+
+    if (revoked) {
+      return res.status(401).json({
+        message: 'Token has been revoked',
+      });
+    }
+
     const user = await User.findById(decoded.sub);
 
     if (!user) {
@@ -39,13 +48,12 @@ export const authenticate = async (req, res, next) => {
     }
 
     req.user = user;
+    req.token = token;
+    req.tokenPayload = decoded;
 
     next();
   } catch (error) {
-    if (
-      error instanceof jwt.JsonWebTokenError ||
-      error instanceof jwt.TokenExpiredError
-    ) {
+    if (error instanceof jwt.JsonWebTokenError) {
       return res.status(401).json({
         message: 'Invalid or expired token',
       });
