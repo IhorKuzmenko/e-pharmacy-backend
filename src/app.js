@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 
+import productsRouter from './routes/productsRouter.js';
+
 const app = express();
 
 app.use(cors());
@@ -13,19 +15,19 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+app.use('/api/products', productsRouter);
+
 app.use((req, res) => {
   res.status(404).json({
-    status: 'error',
     message: 'Route not found',
   });
 });
 
-app.use((err, req, res, next) => {
-  console.error(err);
+app.use((error, req, res, next) => {
+  console.error(error);
 
   res.status(500).json({
-    status: 'error',
-    message: 'Internal server error',
+    message: 'Internal Server Error',
   });
 });
 
