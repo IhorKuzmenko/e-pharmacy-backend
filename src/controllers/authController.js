@@ -1,6 +1,10 @@
 import { registerSchema, loginSchema } from '../validators/authValidators.js';
 
-import { registerUser, loginUser } from '../services/authService.js';
+import {
+  registerUser,
+  loginUser,
+  getUserInfo,
+} from '../services/authService.js';
 
 export const registerController = async (req, res, next) => {
   try {
@@ -48,4 +52,10 @@ export const loginController = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+export const getUserInfoController = (req, res) => {
+  const user = getUserInfo(req.user);
+
+  res.status(200).json(user);
 };

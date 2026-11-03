@@ -83,3 +83,10 @@ export const loginUser = async ({ email, password }) => {
     },
   };
 };
+
+export const getUserInfo = (user) => ({
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  phone: user.phone,
+});
