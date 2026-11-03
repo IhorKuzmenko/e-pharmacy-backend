@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import productsRouter from './routes/productsRouter.js';
 import storesRouter from './routes/storesRouter.js';
+import reviewsRouter from './routes/reviewsRouter.js';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/products', productsRouter);
 app.use('/api/stores', storesRouter);
+app.use('/api/customer-reviews', reviewsRouter);
 
 app.use((req, res) => {
   res.status(404).json({
