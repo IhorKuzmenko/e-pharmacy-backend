@@ -5,6 +5,7 @@ import productsRouter from './routes/productsRouter.js';
 import storesRouter from './routes/storesRouter.js';
 import reviewsRouter from './routes/reviewsRouter.js';
 import userRouter from './routes/userRouter.js';
+import cartRouter from './routes/cartRouter.js';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/stores', storesRouter);
 app.use('/api/customer-reviews', reviewsRouter);
 app.use('/api/user', userRouter);
+app.use('/api/cart', cartRouter);
 
 app.use((req, res) => {
   res.status(404).json({
